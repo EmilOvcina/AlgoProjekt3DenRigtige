@@ -4,13 +4,17 @@ import java.io.IOException;
 
 public class Encode 
 {		
-	
 	private static int[] array;
 	
+	/**
+	*	Main-metoden
+	*/
 	public static void main(String[] args)
 	{
+		//Instans af encode klassen
 		Encode en = new Encode();
 		
+		//Fylder hyppighedsarrayet op med ASCII værdierne fra inputfilen
 		array = new int[256];
 		FileInputStream stream = null;
 		try {
@@ -27,12 +31,13 @@ public class Encode
 			e.printStackTrace();
 		}
 		
+		//Laver arrayet over huffman koderne
 		String[] stringArray = new String[256];
 		
 		Element root = en.huffManAlgorithm(array);
 		en.treeWalk(root, "", stringArray);
 		
-		
+		//Skriver både hyppighedstabellen og huffmankoderne til outputfilen
 		try {
 			BitOutputStream out = new BitOutputStream(new FileOutputStream(args[1]));
 			stream = new FileInputStream(args[0]);
@@ -60,7 +65,9 @@ public class Encode
 		
 	}
 	
-	//HuffMan algoritmen som bruger prioritetskøen til at lave huffmantræet 
+	/*
+	*	HuffMan algoritmen som bruger prioritetskøen til at lave huffmantræet 
+	*/
 	public Element huffManAlgorithm(int[] inputArray)
 	{
 		PQHeap heap = new PQHeap(256);
@@ -81,7 +88,9 @@ public class Encode
 		return heap.extractMin();
 	}
 	
-	//Inorder tree walk algoritmen som bruges til at gå igennem hoffmantræet og lægge det rigtige bit til arrayet af strings
+	/*
+	* Inorder tree walk algoritmen som bruges til at gå igennem hoffmantræet og lægge det rigtige bit til arrayet af strings
+	*/
 	public void treeWalk(Element el, String string, String[] array)
 	{
 		if(el.getData() != null) {
@@ -95,6 +104,4 @@ public class Encode
 			}
 		}
 	}
-	
-	
 }

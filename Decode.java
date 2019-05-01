@@ -4,10 +4,15 @@ import java.io.IOException;
 
 public class Decode 
 {
+	/*
+	*	Main-metoden
+	*/
 	public static void main(String[] args)
 	{
+		//Instans af decode klassen
 		Decode de = new Decode();
 		
+		//Henter hyppighedstabellen fra filen og gemmer i et int array
 		FileInputStream stream = null;
 		int[] hyppighedsArray = new int[256];
 		try {
@@ -19,10 +24,11 @@ public class Decode
 				hyppighedsArray[i] = in.readInt();
 			}
 			
+			//Laver huffmantræet ud fra hyppighedsarreyet 
 			Element root = de.huffManAlgorithm(hyppighedsArray);
 			int sumOfFreq = de.sumOfFreq(hyppighedsArray);
 			
-			
+			//Skriver til outputfilen 
 			FileOutputStream out = new FileOutputStream(args[1]);
 			while(sumOfFreq > 0)
 			{
@@ -35,7 +41,10 @@ public class Decode
 		}		
 	}
 	
-	//
+	/*
+	*	Rekursiv metode som går igennem træet ud fra om input læser 1 eller 0
+	* 	Indtil et blad bliver ramt. Returnerer en ASCII værdi
+	*/
 	public int readFromTree(BitInputStream in, Element e) throws IOException
 	{
 		if(!(e.getData() instanceof Tree))
@@ -46,7 +55,9 @@ public class Decode
 		}
 	}
 	
-	//HuffMan algoritmen som bruger prioritetskøen til at lave huffmantræet 
+	/*
+	* HuffMan algoritmen som bruger prioritetskøen til at lave huffmantræet 
+	*/
 	public Element huffManAlgorithm(int[] inputArray)
 	{
 		PQHeap heap = new PQHeap(256);
@@ -67,6 +78,9 @@ public class Decode
 		return heap.extractMin();
 	}
 	
+	/*
+	*	Summerer frekvenserne sammen fra arrayet, så antal encodet karakterer kendes
+	*/
 	public int sumOfFreq(int[] array)
 	{
 		int result = 0;
